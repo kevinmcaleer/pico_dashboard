@@ -34,10 +34,6 @@ GREEN = {'red': 0, 'green': 220, 'blue': 0}
 ORANGE = {'red': 255, 'green': 171, 'blue': 57}
 LIGHT_ORANGE = {'red': 255, 'green': 179, 'blue': 94}
 
-display.set_pen(WHITE['red'],WHITE['green'], WHITE['blue'])
-display.rectangle(0,0,WIDTH,HEIGHT)
-display.update()
-
 # Frame background colour
 BACKGROUND = {'red': 255, 'green': 171, 'blue': 57}
 

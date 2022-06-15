@@ -26,6 +26,7 @@ THEME3 = {'red': 151, 'green': 250, 'blue': 121}
 
 # Frame background colour
 BACKGROUND = {'red': 100, 'green': 100, 'blue': 100}
+GRID = {'red': 100//4, 'green': 100//4, 'blue': 100//4}
 
 def draw_data():
     """ render the data on the graph, scaling to the axix """
@@ -45,6 +46,10 @@ chart1.title_colour = THEME
 chart2.title_colour = THEME2
 chart3.title_colour = THEME3
 
+chart1.grid_colour = GRID
+chart2.grid_colour = GRID
+chart3.grid_colour = GRID
+
 chart1.border_colour = chart2.border_colour = chart3.border_colour = BACKGROUND
 # chart2.border_colour = BACKGROUND
 #  = BACKGROUND
@@ -59,15 +64,15 @@ chart1.width = WIDTH
 chart1.height = HEIGHT//3
 
 chart2.x = 0
-chart2.y = (HEIGHT//3) + 1
+chart2.y = (HEIGHT//3)*1
 chart2.width = WIDTH
-chart2.height = HEIGHT//3 - 1
+chart2.height = HEIGHT//3 
 chart2.data_point_radius = 2
 
 chart3.x = 0
-chart3.y = chart2.y + chart2.height + 1
+chart3.y = (HEIGHT //3)*2
 chart3.width = WIDTH 
-chart3.height = HEIGHT//3 -1
+chart3.height = HEIGHT//3
 
 chart2.show_bars = False
 chart2.show_lines = True
@@ -78,6 +83,8 @@ chart3.show_bars = False
 # chart3.show_lines = True
 
 chart1.grid = True
+chart2.grid = True
+chart3.grid = True
 
 chart1.update()
 chart2.update()
