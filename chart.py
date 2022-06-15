@@ -7,9 +7,9 @@ class Chart:
     __y_scale = 1
     __x_offset = 0
     __y_offset = 0
-    __background_colour = {'red': 0, 'green': 0, 'blue': 0}
-    __grid_colour = {'red': 0, 'green': 0, 'blue': 0}
-    __border_colour = {'red': 0, 'green': 0, 'blue': 0}
+    background_colour = {'red': 0, 'green': 0, 'blue': 0}
+    border_colour = {'red': 0, 'green': 0, 'blue': 0}
+    grid_colour = {'red':border_colour['red']//4, 'green':border_colour['green']//4,'blue':border_colour['blue']//4}
     __title_colour = {'red': 0, 'green': 0, 'blue': 0}
     __data_colour = {'red': 0, 'green': 0, 'blue': 0}
     __data_point_radius = 2
@@ -18,8 +18,8 @@ class Chart:
     __data_point_height = 1
     __data_point_x_offset = 0
     __data_point_y_offset = 0
-    __x = 0
-    __y = 0
+    x = 0
+    y = 0
     __width = 100
     __height = 100
     border_width = 2
@@ -27,6 +27,7 @@ class Chart:
     __show_datapoints = False
     __show_lines = False
     __show_bars = True
+    __show_labels = False
     grid = True
     grid_spacing = 10
 
@@ -83,24 +84,15 @@ class Chart:
         self.__data_point_radius = value
 
     @property
-    def x(self):
-        """ Get the x position of the chart """
-        return self.__x
+    def show_labels(self):
+        """ Get the show_labels value """
+        return self.__show_labels
 
-    @x.setter
-    def x(self, x):
-        """ Set the x position of the chart """
-        self.__x = x
-
-    @property   
-    def y(self):
-        """ Get the y position of the chart """
-        return self.__y
-
-    @y.setter
-    def y(self, y):
-        """ Set the y position of the chart """
-        self.__y = y
+    @show_labels.setter
+    def show_labels(self, value):
+        """ Set the show_labels value """
+        self.__show_labels = value
+        self.data_point_radius2 = self.data_point_radius
 
     @property
     def width(self):
@@ -141,33 +133,7 @@ class Chart:
     def title_colour(self, colour):
         """ Set the title colour """
         self.__title_colour = colour
-
-    @property
-    def border_colour(self):
-        """ Get the border colour """
-        return self.__border_colour
-
-    @border_colour.setter
-    def border_colour(self, colour):
-        """ Set the border colour """
-        self.__border_colour = colour
         
-#     @property
-#     def x_scale(self):
-#         return self.__x_scale
-# 
-#     @x_scale.setter
-#     def x_scale(self, value):
-#         self.__x_scale = value
-# 
-#     @property
-#     def y_scale(self):
-#         return self.__y_scale
-# 
-#     @y_scale.setter
-#     def y_scale(self, value): 
-#         self.__y_scale = value
-
     @property
     def x_offset(self):
         return self.__x_offset
@@ -218,30 +184,31 @@ class Chart:
         self.__data_point_radius2 = value
         
     def draw_border(self):
-        self.display.set_pen(self.__border_colour['red'], self.__border_colour['green'], self.__border_colour['blue'])
-        x = self.__x
-        y = self.__y 
-        w = self.__width #- (self.border_width * 2) 
-        h = self.__height #- (self.border_width * 2)
+        self.display.set_pen(self.border_colour['red'], self.border_colour['green'], self.border_colour['blue'])
+        x = self.x
+        y = self.y 
+        w = self.__width 
+        h = self.__height
         x1 = x+w
         y1 = y+h
-        # self.display.rectangle(x, y, w, h)
-        
-#         print(f'x: {x}, y: {y}, w: {w}, h: {h}, x1: {x1}, y1: {y1}')
+        self.display.set_clip(x,y,x1,y1)
 
+        # Draw the 4 border lines
         for i in range(0,self.border_width,1):
-#             print(f'border width: {i}')
             self.display.line(x+i, y+i, x+i, y1-i) # left
             self.display.line(x+i, y+i, x1-i, y+i) # top
             self.display.line(x+i, y1-i-1, x1-i, y1-i-1) # bottom
             self.display.line(x1-i-1, y+i, x1-i-1, y1) # right
-        self.display.set_pen(self.__background_colour['red'], self.__background_colour['green'], self.__background_colour['blue'])
         
-        # Draw the border
+        self.display.set_pen(self.background_colour['red'], self.background_colour['green'], self.background_colour['blue'])
+        self.display.remove_clip()
+        
         self.display.update()
+        
 
     def draw_grid(self):
-        self.display.set_pen(self.__border_colour['red']//4, self.__border_colour['green']//4, self.__border_colour['blue']//4)
+        # self.display.set_pen(self.border_colour['red']//4, self.border_colour['green']//4, self.border_colour['blue']//4)
+        self.display.set_pen(self.grid_colour['red'], self.grid_colour['green'], self.grid_colour['blue'])
         x = self.x
         y = self.y 
         w = self.width
@@ -282,28 +249,25 @@ class Chart:
     def update(self):
         """ Update the chart """
         
-        self.display.set_clip(self.x, self.y, self.width, self.height)
+        self.display.set_clip(self.x, self.y, self.x+self.width, self.y+self.height)
         self.display.clear()
         self.display.remove_clip()
         
         # Draw the Grid
         if self.grid: self.draw_grid()
-
-#         self.scale_data()
         
         gap = 3
-        self.display.set_clip(self.x+gap, self.y+gap, self.width-gap, self.height-gap)
-
+        
+        # display the Title
+        self.display.set_clip(self.x+gap, self.y+gap, (self.x+self.width)-gap, (self.y+self.height)-gap)
         self.display.set_pen(self.__title_colour['red'], self.__title_colour['green'], self.__title_colour['blue'])
-#         self.display.rectangle(self.x, self.y, self.x+self.width, self.y+self.__text_height)
-#         
-#         self.display.set_pen(0,0,0)
         self.display.text(self.title, self.x+self.border_width+1, self.y + self.border_width+1,self.__width)
-
         self.display.set_pen(self.__data_colour['red'], self.__data_colour['green'], self.__data_colour['blue'])
-
-        self.__x_offset = self.__x+self.border_width+2
-        self.__y_offset = (self.__height-self.border_width)-2
+        self.display.remove_clip()
+    
+        # Work out the area offset
+        self.__x_offset = self.border_width+2
+        self.__y_offset = (self.height-self.border_width)-2
 
         x_pos = self.x + self.__x_offset
         y_pos = self.y + self.__y_offset 
@@ -311,21 +275,22 @@ class Chart:
         prev_x = x_pos
         prev_y = y_pos
         
-        self.display.remove_clip()
-
+    
         # The area within the chart
         plot_area = (self.height - self.__text_height) - self.border_width*2
-        self.display.set_clip(self.x+self.border_width, self.y+self.border_width+self.__text_height, self.y+self.width, (self.y+self.height)-self.border_width)
+        self.display.set_clip(self.x+self.border_width, self.y+self.border_width+self.__text_height, self.x+self.width, (self.y+self.height)-self.border_width)
 #         self.display.line(self.x, self.y+self.height - plot_area, self.width, self.y+self.height-plot_area)
         # print(f'plot area: {plot_area}, height: {self.height}')
         for item in self.__x_values:
-
+            val = item
             item = int(self.map(item, self.min_val, self.max_val,0,plot_area)) # scale the data
-#             print(f'item: {item}')
+
+            # calculate data visual height
             data_height = int(item)
 
             if self.show_bars:
                 self.display.rectangle(x_pos, y_pos-item, self.__data_point_width, data_height)
+            
             if self.show_datapoints:
                 self.display.set_pen(self.__data_colour['red']//4, self.__data_colour['green']//4, self.__data_colour['blue']//4)
                 self.display.circle(x_pos, y_pos-item, self.__data_point_radius2)
@@ -334,6 +299,10 @@ class Chart:
                 
             if self.show_lines:
                 self.display.line(x_pos, y_pos-item, prev_x, prev_y)
+            
+            if self.show_labels:
+#                 self.display.set_pen(self.data_colour['red']//2,self.__data_colour['green']//2, self.__data_colour['blue']//2)
+                self.display.text(str(val), x_pos-4, y_pos-item -10, self.width - y_pos, 1)
 
             prev_x = x_pos
             prev_y = y_pos-item
