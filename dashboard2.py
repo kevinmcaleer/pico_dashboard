@@ -103,7 +103,7 @@ chart3.update()
 sensor_temp = machine.ADC(4)
 conversion_factor = 3.3 / (65535)
 
-data = [28,34]
+data = [20,34]
 chart1.x_values = data
 chart2.x_values = data
 chart3.x_values = data
