@@ -1,4 +1,4 @@
-# Pico Dashboard
+# Pico Dashboard aka PiChart
 
 A tiny dashboard solution for displaying data from an MQTT server
 
