@@ -3,7 +3,7 @@
 # June 2022
 
 # import picodisplay2 as display
-from chart import Chart
+from pichart import Chart
 from st7789 import ST7789
 import gc 
 import machine
@@ -64,13 +64,13 @@ chart1.width = WIDTH
 chart1.height = HEIGHT//3
 
 chart2.x = 0
-chart2.y = (HEIGHT//3)*1
+chart2.y = HEIGHT//3*1
 chart2.width = WIDTH
-chart2.height = HEIGHT//3 
+chart2.height = HEIGHT//3
 chart2.data_point_radius = 2
 
 chart3.x = 0
-chart3.y = (HEIGHT //3)*2
+chart3.y = HEIGHT //3*2
 chart3.width = WIDTH 
 chart3.height = HEIGHT//3
 
@@ -93,7 +93,7 @@ chart3.update()
 sensor_temp = machine.ADC(4)
 conversion_factor = 3.3 / (65535)
 
-data = [25,34]
+data = [10,34]
 chart1.x_values = data
 chart2.x_values = data
 chart3.x_values = data

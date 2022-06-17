@@ -3,23 +3,24 @@
 # June 2022
 
 # import picodisplay2 as display
-from chart import Chart
-from st7789 import ST7789
+from pichart import Chart
+from picographics import PicoGraphics, DISPLAY_PICO_DISPLAY_2
+display = PicoGraphics(display=DISPLAY_PICO_DISPLAY_2)
+# from st7789 import ST7789
 import gc 
 import machine
 from time import sleep
 from random import randint
 # WIDTH, HEIGHT = 320, 240 # Pico Display 2.0
-WIDTH, HEIGHT = 240, 135 # Pico Display Pack
+# WIDTH, HEIGHT = 240, 135 # Pico Display Pack
+WIDTH, HEIGHT = display.get_bounds()
 
-display = ST7789(WIDTH, HEIGHT, rotate180=False)
+# display = ST7789(WIDTH, HEIGHT, rotate180=False)
 
 gc.collect()
 
 # Set the display backlight to 50%
 display.set_backlight(1.0)
-
-
 
 data = [10,11,9,13,2,10,12,10,10,9,7,11,10,11,9,13,2,10,12,10,10,9,7,11]
 
