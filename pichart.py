@@ -279,7 +279,7 @@ class Card(Chart):
 class Image_tile:
     __image_file = None
     x = 0
-    w = 0
+    y = 0
     width = 0
     height = 0
     border_colour = {'red':0, 'green':0, 'blue':0}
