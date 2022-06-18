@@ -1,3 +1,5 @@
+import jpegdec 
+
 class Chart:
     title = ''
     x_values = []
@@ -274,6 +276,67 @@ class Card(Chart):
         # Update the display
         self.display.update()
 
+class Image_tile:
+    __image_file = None
+    x = 0
+    w = 0
+    width = 0
+    height = 0
+    border_colour = {'red':0, 'green':0, 'blue':0}
+    border_width = 2
+    
+    def __init__(self, display, filename=None):
+        """ Initialise the image tile """
+        self.display = display
+        if filename:
+            self.__image_file = filename
+
+    @property
+    def filename(self):
+        return self.__image_file
+
+    @filename.setter
+    def filename(self, file:str):
+        self.__image_file = file
+
+    def draw_border(self):
+        border_colour = self.display.create_pen(self.border_colour['red'], self.border_colour['green'], self.border_colour['blue'])
+        # background_colour = self.display.create_pen(self.background_colour['red'], self.background_colour['green'], self.background_colour['blue'])
+        self.display.set_pen(border_colour)
+        x = self.x
+        y = self.y 
+        w = self.width 
+        h = self.height
+        x1 = x+w
+        y1 = y+h
+        self.display.set_clip(x,y,x1,y1)
+
+        # Draw the 4 border lines
+        for i in range(0,self.border_width,1):
+            self.display.line(x+i, y+i, x+i, y1-i) # left
+            self.display.line(x+i, y+i, x1-i, y+i) # top
+            self.display.line(x+i, y1-i-1, x1-i, y1-i-1) # bottom
+            self.display.line(x1-i-1, y+i, x1-i-1, y1) # right
+        
+        # self.display.set_pen(background_colour)
+        self.display.remove_clip()
+
+    def update(self):
+        """ Display the image tile"""
+        
+        j = jpegdec.JPEG(self.display)
+
+        # Open the JPEG file
+        j.open_file(self.filename)
+
+        self.display.set_clip(self.x, self.y, self.width, self.height)
+
+        # Decode the JPEG
+        j.decode(self.x, self.y, jpegdec.JPEG_SCALE_HALF)
+
+        self.display.remove_clip()
+        # Draw the border 
+        self.draw_border()
 
 class Container:
     """ A container class """
@@ -282,6 +345,10 @@ class Container:
     
     charts = []
     cols = 1
+    __background_colour = {'red':0, 'green':0, 'blue':0}
+    __title_colour = {'red':0, 'green':0, 'blue':0}
+    __data_colour = {'red':0, 'green':0, 'blue':0}
+    __grid_colour = {'red':0, 'green':0, 'blue':0}
 
     def __init__(self, display, width=None, height=None):
         if width: 
@@ -321,3 +388,67 @@ class Container:
             for item in self.charts:
                 item.update()
 
+    @property
+    def background_colour(self):
+        return self.__background_colour
+
+    @background_colour.setter
+    def background_colour(self, value):
+        
+        self.__background_colour = value
+        for item in self.charts:
+            item.background_colour = value
+    
+    @property
+    def grid_colour(self):
+        return self.__grid_colour
+
+    @grid_colour.setter
+    def grid_colour(self, value):
+        
+        self.__grid_colour = value
+        for item in self.charts:
+            item.grid_colour = value
+    
+    @property
+    def data_colour(self):
+        return self.__data_colour
+
+    @data_colour.setter
+    def data_colour(self, value):
+        
+        self.__data_colour = value
+        for item in self.charts:
+            item.data_colour = value
+            
+    @property
+    def title_colour(self):
+        return self.__title_colour
+
+    @title_colour.setter
+    def title_colour(self, value):
+        
+        self.__title_colour = value
+        for item in self.charts:
+            item.title_colour = value
+    
+    @property
+    def border_colour(self):
+        return self.__border_colour
+
+    @border_colour.setter
+    def border_colour(self, value):
+        
+        self.__border_colour = value
+        for item in self.charts:
+            item.border_colour = value
+    @property
+    def border_width(self):
+        return self.__border_width
+
+    @border_width.setter
+    def border_width(self, value):
+        
+        self.__border_width = value
+        for item in self.charts:
+            item.border_width = value
